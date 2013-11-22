@@ -10,6 +10,6 @@
                    :version "gorgon-visio"
                    :worker_slots 0}))
 
-(defn ping-handler [msg-type reply_exchange_name body]
+(defn ping-handler [{msg-type "type" reply_exchange_name "reply_exchange_name" body "body"}]
   (let [ch   (lch/open conn)]
     (lb/publish ch reply_exchange_name "" ping_response :content-type "application/json")))
