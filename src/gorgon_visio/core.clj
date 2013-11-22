@@ -2,22 +2,22 @@
   (:gen-class)
   (:require [teporingo.broker :as broker]
             [clj-etl-utils.log :as log])
-  ;; (:use
-  ;;  [teporingo.core   :only [*reply-code* *reply-text* *exchange* *routing-key* *message-properties* *listener* *conn* *props* *body*
-  ;;                           *active* *confirm-type* *delivery-tag* *multiple* publisher publish]]
-   ;; [clj-etl-utils.lang-utils :only [raise]])
+  (:use
+   [teporingo.core   :only [*reply-code* *reply-text* *exchange* *routing-key* *message-properties* *listener* *conn* *props* *body*
+                            *active* *confirm-type* *delivery-tag* *multiple* publisher publish]]
+   [clj-etl-utils.lang-utils :only [raise]])
   )
 
-;; (defn handle-returned-message []
-;;   (log/errorf
-;;    "[publisher] RETURNED: conn=%s code=%s text=%s exchange=%s routing-key:%s props=%s body=%s"
-;;    @*conn*
-;;    *reply-code*
-;;    *reply-text*
-;;    *exchange*
-;;    *routing-key*
-;;    *props*
-;;    (String. *body*)))
+(defn handle-returned-message []
+  (log/errorf
+   "[publisher] RETURNED: conn=%s code=%s text=%s exchange=%s routing-key:%s props=%s body=%s"
+   @*conn*
+   *reply-code*
+   *reply-text*
+   *exchange*
+   *routing-key*
+   *props*
+   (String. *body*)))
 
 (broker/register
  :amqp01
@@ -40,4 +40,4 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (println "Changed!"))
+  (println "Changed again!"))

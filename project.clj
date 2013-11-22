@@ -4,7 +4,8 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [com.github.kyleburton/teporingo "2.1.27"]]
+                 [com.github.kyleburton/teporingo "2.1.27"]
+                 [org.clojure/data.json "0.2.0"]]
   :main ^:skip-aot gorgon-visio.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
