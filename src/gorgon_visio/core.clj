@@ -13,8 +13,8 @@
         ch   (lch/open conn)]
     (println (format "[consumer] received %s"  msg-type))
     (lb/publish ch reply_exchange_name "" (json/write-str {:type "ping_response"
-                                                           :hostname "aaa"
-                                                           :version "vvv"
+                                                           :hostname (.getCanonicalHostName (java.net.InetAddress/getLocalHost))
+                                                           :version "gorgon-visio"
                                                            :worker_slots 0})
                 :content-type "application/json")))
 
