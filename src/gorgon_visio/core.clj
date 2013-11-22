@@ -6,20 +6,12 @@
             [langohr.exchange  :as le]
             [langohr.consumers :as lc]
             [langohr.basic     :as lb]
-            [clojure.data.json :as json]))
-
-(defn ping-handler [msg-type reply_exchange_name body]
-  (let [conn (rmq/connect {:host "cppc.local"})
-        ch   (lch/open conn)]
-    (println (format "[consumer] received %s"  msg-type))
-    (lb/publish ch reply_exchange_name "" (json/write-str {:type "ping_response"
-                                                           :hostname (.getCanonicalHostName (java.net.InetAddress/getLocalHost))
-                                                           :version "gorgon-visio"
-                                                           :worker_slots 0})
-                :content-type "application/json")))
+            [clojure.data.json :as json]
+            [gorgon-visio.ping-handler :as ph])
+  (:use [gorgon-visio.connection :only (conn)]))
 
 (def msg-handlers
-  {"ping" ping-handler})
+  {"ping" ph/ping-handler})
 
 (defn handle-msg [ch {:keys [content-type delivery-tag type] :as meta} ^bytes payload]
   "Hanldes message"
@@ -37,13 +29,12 @@
         handler    handle-msg]
     (lq/declare ch queue-name :exclusive false :auto-delete true)
     (lq/bind    ch queue-name topic-name)
-    (println "GOGOGOGOG")
+    (println "Listening...")
     (lc/blocking-subscribe ch queue-name handler :auto-ack true)))
 
 (defn -main
   [& args]
-  (let [conn  (rmq/connect {:host "cppc.local"})
-        ch    (lch/open conn)
+  (let [ch    (lch/open conn)
         ex    "gorgon.jobs"]
     (le/declare ch ex "fanout")
     (start-listener ch ex)
