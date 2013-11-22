@@ -9,7 +9,7 @@
             [clojure.data.json :as json]))
 
 (defn ping-handler [msg-type reply_exchange_name body]
-  (let [conn (rmq/connect)
+  (let [conn (rmq/connect {:host "cppc.local"})
         ch   (lch/open conn)]
     (println (format "[consumer] received %s"  msg-type))
     (lb/publish ch reply_exchange_name "" (json/write-str {:type "ping_response"
@@ -42,7 +42,7 @@
 
 (defn -main
   [& args]
-  (let [conn  (rmq/connect)
+  (let [conn  (rmq/connect {:host "cppc.local"})
         ch    (lch/open conn)
         ex    "gorgon.jobs"]
     (le/declare ch ex "fanout")
