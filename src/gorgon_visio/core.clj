@@ -5,26 +5,9 @@
             [langohr.queue     :as lq]
             [langohr.exchange  :as le]
             [langohr.consumers :as lc]
-            [langohr.basic     :as lb]
-            [clojure.data.json :as json]
-            [gorgon-visio.ping-handler :as ph]
-            [gorgon-visio.job-definition-handler :as jdh])
-  (:use [gorgon-visio.connection :only (conn)]))
-
-(def msg-handlers
-  {"ping" ph/ping-handler
-   "job_definition" jdh/job-handler})
-
-(defn default-handler [msg-type reply_exchange_name body]
-  (println (str "Received unrecognized message type: " msg-type)))
-
-(defn handle-msg [ch {:keys [content-type delivery-tag type] :as meta} ^bytes payload]
-  "Hanldes message"
-  [(try
-     (let [message (json/read-str (String. payload "UTF-8"))
-           {msg-type "type"} message]
-       ((msg-handlers msg-type default-handler) message))
-     (catch Exception e (println "Exception catched.") (.printStackTrace e)))])
+            [langohr.basic     :as lb])
+  (:use [gorgon-visio.connection :only (conn)]
+        [gorgon-visio.msg-handlers :only (handle-msg)]))
 
 (defn start-listener
   "Starts a consumer bound to the given topic exchange in a separate thread"
